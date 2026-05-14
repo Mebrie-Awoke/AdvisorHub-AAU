@@ -1,9 +1,14 @@
-    </main>
-    <footer>
-        <div class="container">
-            <p>&copy; <?php echo date('Y'); ?> AdvisorHub-AAU. All rights reserved.</p>
-        </div>
-    </footer>
-    <script src="public/js/main.js"></script>
+<?php
+$isAuthPage = in_array($currentAction ?? '', ['login', 'register']) || !isset($_SESSION['user_id']);
+?>
+
+<?php if ($isAuthPage): ?>
+</div><!-- /.auth-page -->
+<?php else: ?>
+        </div><!-- /.page-content -->
+    </div><!-- /.main-content -->
+</div><!-- /.layout -->
+<?php endif; ?>
+
 </body>
 </html>

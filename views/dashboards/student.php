@@ -1,30 +1,40 @@
 <?php include __DIR__ . '/../layouts/header.php'; ?>
 
-<div class="dashboard-container">
-    <h2>Student Dashboard</h2>
-    <div class="dashboard-content">
-        <p>Welcome back, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong>!</p>
-        
-        <div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
-            <div class="card" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <h3>My Advisor</h3>
-                <p>View your assigned advisor and contact information.</p>
-                <button class="btn btn-primary" style="margin-top: 10px;" disabled>Coming in Phase 3</button>
-            </div>
-            
-            <div class="card" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <h3>Messages</h3>
-                <p>Communicate directly with your assigned advisor.</p>
-                <button class="btn btn-primary" style="margin-top: 10px;" disabled>Coming in Phase 4</button>
-            </div>
+<div class="page-header">
+    <h1>Student Dashboard</h1>
+    <p>Welcome back, <strong><?php echo htmlspecialchars($_SESSION['user_name']); ?></strong>! Here's your overview.</p>
+</div>
 
-            <div class="card" style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <h3>Notifications</h3>
-                <p>View announcements and notifications from your advisor.</p>
-                <button class="btn btn-primary" style="margin-top: 10px;" disabled>Coming in Phase 5</button>
-            </div>
-        </div>
+<div class="content-grid">
+
+    <div class="feature-card">
+        <div class="feature-card-icon">👤</div>
+        <h3>My Advisor</h3>
+        <p>View your assigned academic advisor and their contact information.</p>
+        <span class="badge-coming">⏳ Coming in Phase 3</span>
     </div>
+
+    <div class="feature-card">
+        <div class="feature-card-icon">💬</div>
+        <h3>Messages</h3>
+        <p>Send and receive messages directly with your assigned advisor.</p>
+        <span class="badge-coming">⏳ Coming in Phase 4</span>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-card-icon">📅</div>
+        <h3>Appointments</h3>
+        <p>Schedule and manage meetings with your academic advisor.</p>
+        <span class="badge-coming">⏳ Coming in Phase 4</span>
+    </div>
+
+    <div class="feature-card">
+        <div class="feature-card-icon">🔔</div>
+        <h3>Notifications</h3>
+        <p>Stay informed with announcements and updates from your advisor.</p>
+        <span class="badge-coming">⏳ Coming in Phase 5</span>
+    </div>
+
 </div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

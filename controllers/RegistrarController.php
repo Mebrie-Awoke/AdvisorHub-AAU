@@ -24,6 +24,7 @@ class RegistrarController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->assignment->student_id = $_POST['student_id'];
             $this->assignment->advisor_id = $_POST['advisor_id'];
+            $this->assignment->assigned_by = $_SESSION['user_id'];
 
             if ($this->assignment->assignStudent()) {
                 $_SESSION['success'] = 'Student successfully assigned to advisor.';

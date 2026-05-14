@@ -15,27 +15,45 @@ class User {
     }
 
     public function register() {
-        $query = 'INSERT INTO ' . $this->table . ' SET name = :name, email = :email, password = :password, role = :role';
+        try {
+            $this->conn->beginTransaction();
 
-        $stmt = $this->conn->prepare($query);
+            $query = 'INSERT INTO ' . $this->table . ' SET name = :name, email = :email, password = :password, role = :role';
+            $stmt = $this->conn->prepare($query);
 
-        // Clean data
-        $this->name = htmlspecialchars(strip_tags($this->name));
-        $this->email = htmlspecialchars(strip_tags($this->email));
-        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
-        $this->role = htmlspecialchars(strip_tags($this->role));
+            $this->name = htmlspecialchars(strip_tags($this->name));
+            $this->email = htmlspecialchars(strip_tags($this->email));
+            $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+            $this->role = htmlspecialchars(strip_tags($this->role));
 
-        // Bind data
-        $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':password', $this->password);
-        $stmt->bindParam(':role', $this->role);
+            $stmt->bindParam(':name', $this->name);
+            $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':password', $this->password);
+            $stmt->bindParam(':role', $this->role);
 
-        if($stmt->execute()) {
+            $stmt->execute();
+            $newUserId = $this->conn->lastInsertId();
+
+            if ($this->role === 'student') {
+                $roleQuery = 'INSERT INTO students SET id = :id, user_id = :user_id';
+                $roleStmt = $this->conn->prepare($roleQuery);
+                $roleStmt->bindParam(':id', $newUserId);
+                $roleStmt->bindParam(':user_id', $newUserId);
+                $roleStmt->execute();
+            } elseif ($this->role === 'advisor') {
+                $roleQuery = 'INSERT INTO advisors SET id = :id, user_id = :user_id';
+                $roleStmt = $this->conn->prepare($roleQuery);
+                $roleStmt->bindParam(':id', $newUserId);
+                $roleStmt->bindParam(':user_id', $newUserId);
+                $roleStmt->execute();
+            }
+
+            $this->conn->commit();
             return true;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            return false;
         }
-
-        return false;
     }
 
     public function login() {

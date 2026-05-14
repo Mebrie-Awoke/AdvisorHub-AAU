@@ -3,7 +3,7 @@ session_start();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'home';
 
-// Handle specific actions that require the AuthController
+// Handle specific actions that require Controllers
 if (in_array($action, ['login', 'register', 'logout'])) {
     require_once __DIR__ . '/controllers/AuthController.php';
     $authController = new AuthController();
@@ -15,6 +15,10 @@ if (in_array($action, ['login', 'register', 'logout'])) {
     } elseif ($action === 'logout') {
         $authController->logout();
     }
+} elseif ($action === 'assign_student' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/controllers/RegistrarController.php';
+    $registrarController = new RegistrarController();
+    $registrarController->assignStudent();
 }
 
 // Simple Router

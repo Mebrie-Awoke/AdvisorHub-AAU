@@ -11,8 +11,6 @@
 <body>
 
 <?php
-// Determine if we are on an auth page (login/register) or a dashboard page
-$isAuthPage = !isset($_SESSION['user_id']);
 $currentAction = isset($_GET['action']) ? $_GET['action'] : 'home';
 $isAuthPage = in_array($currentAction, ['login', 'register']) || !isset($_SESSION['user_id']);
 ?>
@@ -20,123 +18,98 @@ $isAuthPage = in_array($currentAction, ['login', 'register']) || !isset($_SESSIO
 <?php if ($isAuthPage): ?>
 <!-- ======= AUTH LAYOUT ======= -->
 <div class="auth-page">
+
 <?php else: ?>
 <!-- ======= DASHBOARD LAYOUT ======= -->
 <div class="layout">
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo-icon">🎓</div>
+    <!-- Top Navbar -->
+    <nav class="navbar">
+
+        <!-- Brand -->
+        <a href="index.php" class="navbar-brand">
+            <div class="navbar-logo-icon">🎓</div>
             <div>
-                <div class="sidebar-logo-text">AdvisorHub</div>
-                <div class="sidebar-logo-sub">AAU University System</div>
+                <div class="navbar-logo-text">AdvisorHub</div>
+                <div class="navbar-logo-sub">AAU University System</div>
             </div>
-        </div>
+        </a>
 
-        <?php if(isset($_SESSION['user_id'])): 
-            $initials = strtoupper(substr($_SESSION['user_name'], 0, 1));
-        ?>
-        <div class="sidebar-user">
-            <div class="sidebar-avatar"><?php echo $initials; ?></div>
-            <div class="sidebar-user-info">
-                <div class="user-name"><?php echo htmlspecialchars($_SESSION['user_name']); ?></div>
-                <div class="user-role"><?php echo htmlspecialchars($_SESSION['user_role']); ?></div>
-            </div>
-        </div>
-        <?php endif; ?>
-
-        <nav class="sidebar-nav">
-            <div class="nav-section-label">Main</div>
-
+        <!-- Nav Links -->
+        <div class="navbar-nav">
             <?php if(isset($_SESSION['user_role'])): ?>
                 <?php if($_SESSION['user_role'] === 'registrar'): ?>
                     <a href="index.php?action=registrar_dashboard" class="nav-item <?php echo ($currentAction==='registrar_dashboard')?'active':''; ?>">
-                        <span class="nav-icon">🏠</span> Dashboard
+                        <span class="nav-icon">🏠</span> <span>Dashboard</span>
                     </a>
                     <a href="index.php?action=registrar_dashboard" class="nav-item">
-                        <span class="nav-icon">👥</span> Manage Users
+                        <span class="nav-icon">👥</span> <span>Users</span>
                     </a>
                     <a href="index.php?action=registrar_dashboard" class="nav-item">
-                        <span class="nav-icon">🔗</span> Assignments
+                        <span class="nav-icon">🔗</span> <span>Assignments</span>
                     </a>
 
                 <?php elseif($_SESSION['user_role'] === 'advisor'): ?>
                     <a href="index.php?action=advisor_dashboard" class="nav-item <?php echo ($currentAction==='advisor_dashboard')?'active':''; ?>">
-                        <span class="nav-icon">🏠</span> Dashboard
+                        <span class="nav-icon">🏠</span> <span>Dashboard</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <span class="nav-icon">🎓</span> My Students
+                        <span class="nav-icon">🎓</span> <span>My Students</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <span class="nav-icon">💬</span> Messages
+                        <span class="nav-icon">💬</span> <span>Messages</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <span class="nav-icon">🔔</span> Notifications
+                        <span class="nav-icon">🔔</span> <span>Notifications</span>
                     </a>
 
                 <?php elseif($_SESSION['user_role'] === 'student'): ?>
                     <a href="index.php?action=student_dashboard" class="nav-item <?php echo ($currentAction==='student_dashboard')?'active':''; ?>">
-                        <span class="nav-icon">🏠</span> Dashboard
+                        <span class="nav-icon">🏠</span> <span>Dashboard</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <span class="nav-icon">👤</span> My Advisor
+                        <span class="nav-icon">👤</span> <span>My Advisor</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <span class="nav-icon">💬</span> Messages
+                        <span class="nav-icon">💬</span> <span>Messages</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <span class="nav-icon">📅</span> Appointments
+                        <span class="nav-icon">📅</span> <span>Appointments</span>
                     </a>
                     <a href="#" class="nav-item">
-                        <span class="nav-icon">🔔</span> Notifications
+                        <span class="nav-icon">🔔</span> <span>Notifications</span>
                     </a>
                 <?php endif; ?>
             <?php endif; ?>
+        </div>
 
-            <div class="nav-section-label" style="margin-top: 16px;">Account</div>
-            <?php if(isset($_SESSION['user_id'])): ?>
+        <!-- Right: user info + logout -->
+        <div class="navbar-right">
+            <?php if(isset($_SESSION['user_id'])): 
+                $initials = strtoupper(substr($_SESSION['user_name'], 0, 1));
+            ?>
+                <div class="navbar-avatar"><?php echo $initials; ?></div>
+                <span class="navbar-username"><?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
+                <span class="topbar-badge"><?php echo htmlspecialchars($_SESSION['user_role']); ?></span>
                 <a href="index.php?action=logout" class="nav-item nav-logout">
-                    <span class="nav-icon">🚪</span> Logout
+                    <span class="nav-icon">🚪</span> <span>Logout</span>
                 </a>
             <?php else: ?>
                 <a href="index.php?action=login" class="nav-item">
-                    <span class="nav-icon">🔑</span> Login
+                    <span class="nav-icon">🔑</span> <span>Login</span>
                 </a>
             <?php endif; ?>
-        </nav>
+        </div>
 
-        <div class="sidebar-footer">© <?php echo date('Y'); ?> AdvisorHub AAU</div>
-    </aside>
+    </nav><!-- /.navbar -->
 
     <!-- Main Content -->
     <div class="main-content">
-
-        <!-- Top Bar -->
-        <div class="topbar">
-            <span class="topbar-title">
-                <?php
-                $pageNames = [
-                    'registrar_dashboard' => 'Registrar Dashboard',
-                    'advisor_dashboard'   => 'Advisor Dashboard',
-                    'student_dashboard'   => 'Student Dashboard',
-                ];
-                echo $pageNames[$currentAction] ?? 'Dashboard';
-                ?>
-            </span>
-            <div class="topbar-right">
-                <?php if(isset($_SESSION['user_role'])): ?>
-                    <span class="topbar-badge"><?php echo htmlspecialchars($_SESSION['user_role']); ?></span>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <!-- Page Content Start -->
         <div class="page-content">
 
 <?php endif; ?>
 
-<!-- Flash Messages (both layouts) -->
+<!-- Flash Messages -->
 <?php if(isset($_SESSION['success'])): ?>
     <div class="alert alert-success">
         ✅ <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>

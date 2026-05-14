@@ -90,4 +90,53 @@ class User {
 
         return false;
     }
+
+    // --- CRUD Methods for Registrar ---
+
+    public function getAllUsers($search = '', $role_filter = '') {
+        $query = 'SELECT id, name, email, role, created_at FROM ' . $this->table . ' WHERE 1=1';
+
+        if (!empty($search)) {
+            $query .= ' AND (name LIKE :search OR email LIKE :search)';
+        }
+
+        if (!empty($role_filter)) {
+            $query .= ' AND role = :role_filter';
+        }
+
+        $query .= ' ORDER BY created_at DESC';
+        
+        $stmt = $this->conn->prepare($query);
+
+        if (!empty($search)) {
+            $searchParam = "%{$search}%";
+            $stmt->bindParam(':search', $searchParam);
+        }
+
+        if (!empty($role_filter)) {
+            $stmt->bindParam(':role_filter', $role_filter);
+        }
+
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function deleteUser($id) {
+        $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        
+        if($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getUserById($id) {
+        $query = 'SELECT id, name, email, role FROM ' . $this->table . ' WHERE id = :id LIMIT 0,1';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

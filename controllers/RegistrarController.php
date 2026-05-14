@@ -35,17 +35,44 @@ class RegistrarController {
         }
     }
 
+    public function deleteUser() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user_id'])) {
+            $userId = $_POST['user_id'];
+            if ($this->userModel->deleteUser($userId)) {
+                $_SESSION['success'] = 'User successfully deleted.';
+            } else {
+                $_SESSION['error'] = 'Failed to delete user.';
+            }
+            header('Location: index.php?action=registrar_dashboard');
+            exit;
+        }
+    }
+
     public function getDashboardData() {
+        $search = isset($_GET['search']) ? $_GET['search'] : '';
+        $role_filter = isset($_GET['role']) ? $_GET['role'] : '';
+
         // Get all unassigned and assigned students
         $studentsQuery = $this->db->query("SELECT id, name FROM users WHERE role = 'student'");
         $advisorsQuery = $this->db->query("SELECT id, name FROM users WHERE role = 'advisor'");
         
         $assignmentsQuery = $this->assignment->getAllAssignments();
+        $allUsersQuery = $this->userModel->getAllUsers($search, $role_filter);
+
+        // Calculate metrics
+        $metrics = [
+            'total_students' => $this->db->query("SELECT COUNT(id) FROM users WHERE role='student'")->fetchColumn(),
+            'total_advisors' => $this->db->query("SELECT COUNT(id) FROM users WHERE role='advisor'")->fetchColumn(),
+        ];
 
         return [
             'students' => $studentsQuery->fetchAll(PDO::FETCH_ASSOC),
             'advisors' => $advisorsQuery->fetchAll(PDO::FETCH_ASSOC),
-            'assignments' => $assignmentsQuery->fetchAll(PDO::FETCH_ASSOC)
+            'assignments' => $assignmentsQuery->fetchAll(PDO::FETCH_ASSOC),
+            'users' => $allUsersQuery->fetchAll(PDO::FETCH_ASSOC),
+            'metrics' => $metrics,
+            'search' => $search,
+            'role_filter' => $role_filter
         ];
     }
 }

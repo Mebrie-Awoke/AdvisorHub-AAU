@@ -19,6 +19,10 @@ if (in_array($action, ['login', 'register', 'logout'])) {
     require_once __DIR__ . '/controllers/RegistrarController.php';
     $registrarController = new RegistrarController();
     $registrarController->assignStudent();
+} elseif ($action === 'delete_user' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/controllers/RegistrarController.php';
+    $registrarController = new RegistrarController();
+    $registrarController->deleteUser();
 }
 
 // Simple Router

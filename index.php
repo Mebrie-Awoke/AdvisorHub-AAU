@@ -35,17 +35,40 @@ switch ($action) {
         include __DIR__ . '/views/auth/register.php';
         break;
         
+    case 'student_dashboard':
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'student') {
+            header('Location: index.php?action=login');
+            exit;
+        }
+        include __DIR__ . '/views/dashboards/student.php';
+        break;
+
+    case 'advisor_dashboard':
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'advisor') {
+            header('Location: index.php?action=login');
+            exit;
+        }
+        include __DIR__ . '/views/dashboards/advisor.php';
+        break;
+
+    case 'registrar_dashboard':
+        if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'registrar') {
+            header('Location: index.php?action=login');
+            exit;
+        }
+        include __DIR__ . '/views/dashboards/registrar.php';
+        break;
+
     case 'dashboard':
         if (!isset($_SESSION['user_id'])) {
             header('Location: index.php?action=login');
             exit;
         }
-        // Placeholder for dashboard views - Phase 2 will expand this
-        include __DIR__ . '/views/layouts/header.php';
-        echo "<div class='container' style='margin-top: 30px;'><h2>Welcome, " . htmlspecialchars($_SESSION['user_name']) . "</h2>";
-        echo "<p>Your role is: " . htmlspecialchars($_SESSION['user_role']) . "</p>";
-        echo "<p><em>Phase 2 will implement role-specific dashboards.</em></p></div>";
-        include __DIR__ . '/views/layouts/footer.php';
+        // Fallback for general dashboard access
+        if ($_SESSION['user_role'] == 'student') header('Location: index.php?action=student_dashboard');
+        elseif ($_SESSION['user_role'] == 'advisor') header('Location: index.php?action=advisor_dashboard');
+        elseif ($_SESSION['user_role'] == 'registrar') header('Location: index.php?action=registrar_dashboard');
+        exit;
         break;
         
     case 'home':

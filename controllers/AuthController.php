@@ -48,7 +48,15 @@ class AuthController {
                 $_SESSION['user_role'] = $this->user->role;
 
                 // Redirect based on role
-                header('Location: index.php?action=dashboard');
+                if ($this->user->role == 'student') {
+                    header('Location: index.php?action=student_dashboard');
+                } elseif ($this->user->role == 'advisor') {
+                    header('Location: index.php?action=advisor_dashboard');
+                } elseif ($this->user->role == 'registrar') {
+                    header('Location: index.php?action=registrar_dashboard');
+                } else {
+                    header('Location: index.php?action=dashboard');
+                }
                 exit;
             } else {
                 $_SESSION['error'] = 'Invalid email or password.';

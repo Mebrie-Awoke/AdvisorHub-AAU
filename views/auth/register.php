@@ -10,31 +10,47 @@
     <p class="auth-subtitle">Join the AAU university advisory system</p>
 
     <form action="index.php?action=register" method="POST" class="auth-form">
-        <div class="form-group">
+        <div class="form-group form-floating">
+            <input type="text" name="name" id="name" placeholder="Full Name" required>
             <label for="name">Full Name</label>
-            <input type="text" name="name" id="name" placeholder="Your full name" required>
+            <span class="field-status"></span>
         </div>
 
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" name="email" id="email" placeholder="you@university.edu" required>
+        <div class="form-group form-floating">
+            <input type="email" name="email" id="email" placeholder="University Email" required>
+            <label for="email">University Email</label>
+            <span class="field-status"></span>
         </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder="Create a secure password" required>
+        <div class="form-row">
+            <div class="form-group form-floating">
+                <input type="text" name="student_id" id="student_id" placeholder="Student ID" required>
+                <label for="student_id">Student ID</label>
+                <span class="field-status"></span>
+            </div>
+            <div class="form-group form-floating">
+                <input type="text" name="program" id="program" placeholder="Program or Department">
+                <label for="program">Program</label>
+                <span class="field-status"></span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="role">Select Role</label>
-            <select name="role" id="role" required>
-                <option value="student">🎓 Student</option>
-                <option value="advisor">📋 Advisor</option>
-                <option value="registrar">🏛️ Registrar</option>
-            </select>
+        <div class="form-row">
+            <div class="form-group form-floating">
+                <input type="number" name="year" id="year" placeholder="Year" min="1" max="8">
+                <label for="year">Year</label>
+                <span class="field-status"></span>
+            </div>
+            <div class="form-group form-floating">
+                <input type="text" name="phone" id="phone" placeholder="Phone Number">
+                <label for="phone">Phone</label>
+                <span class="field-status"></span>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Create Account →</button>
+        <input type="hidden" name="role" value="student">
+
+        <button type="submit" class="btn btn-primary">Create Account <span class="btn-icon">→</span></button>
 
         <p class="auth-link">Already have an account? <a href="index.php?action=login">Login here</a></p>
     </form>

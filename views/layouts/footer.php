@@ -10,5 +10,7 @@ $isAuthPage = in_array($currentAction ?? '', ['login', 'register']) || !isset($_
 </div><!-- /.layout -->
 <?php endif; ?>
 
+<div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+<script src="public/js/app.js"></script>
 </body>
 </html>

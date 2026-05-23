@@ -2,12 +2,12 @@
 
 class Assignment {
     private $conn;
-    private $table = 'advisor_assignments';
+    private $table = 'assignments';
 
     public $id;
     public $student_id;
     public $advisor_id;
-    public $assigned_by;
+    public $assigned_by_registrar_id;
     public $assigned_at;
 
     public function __construct($db) {
@@ -26,6 +26,7 @@ class Assignment {
         $query = 'INSERT INTO ' . $this->table . ' (student_id, advisor_id, assigned_by) 
                   VALUES (:student_id, :advisor_id, :assigned_by)';
 
+        $query = "INSERT INTO {$this->table} (student_id, advisor_id, assigned_by_registrar_id) VALUES (:student_id, :advisor_id, :assigned_by)";
         $stmt = $this->conn->prepare($query);
 
         $this->advisor_id = htmlspecialchars(strip_tags($this->advisor_id));
@@ -68,15 +69,10 @@ class Assignment {
     }
 
     public function getAllAssignments() {
-        $query = 'SELECT a.id, s.name as student_name, adv.name as advisor_name, a.assigned_at 
-                  FROM ' . $this->table . ' a
-                  JOIN users s ON a.student_id = s.id
-                  JOIN users adv ON a.advisor_id = adv.id
-                  WHERE a.is_active = 1
-                  ORDER BY a.assigned_at DESC';
-
+        $query = "SELECT ass.id, s.full_name as student_name, adv.full_name as advisor_name, ass.assigned_at FROM {$this->table} ass JOIN students s ON ass.student_id = s.id JOIN advisors adv ON ass.advisor_id = adv.id WHERE ass.is_active = 1 ORDER BY ass.assigned_at DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetchAll();
     }
 }
+

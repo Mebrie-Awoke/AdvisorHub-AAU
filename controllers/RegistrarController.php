@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../config/Mailer.php';
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Student.php';
+require_once __DIR__ . '/../models/Advisor.php';
 require_once __DIR__ . '/../models/Assignment.php';
 require_once __DIR__ . '/../models/Message.php';
 
@@ -25,12 +28,12 @@ class RegistrarController {
 
     public function assignStudent() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->assignment->student_id = $_POST['student_id'];
-            $this->assignment->advisor_id = $_POST['advisor_id'];
-            $this->assignment->assigned_by = $_SESSION['user_id'];
-
-            if ($this->assignment->assignStudent()) {
-                $_SESSION['success'] = 'Student successfully assigned to advisor.';
+            $student_id = intval($_POST['student_id']);
+            $advisor_id = intval($_POST['advisor_id']);
+            if ($this->assignment->assignStudent($student_id, $advisor_id, $_SESSION['user_id'])) {
+                $log = new ActivityLog($this->db);
+                $log->log($_SESSION['user_id'], 'registrar', 'assigned_student', json_encode(['student_id' => $student_id, 'advisor_id' => $advisor_id]), $_SERVER['REMOTE_ADDR'] ?? null);
+                $_SESSION['success'] = 'Student assigned.';
             } else {
                 $_SESSION['error'] = 'Failed to assign student.';
             }
@@ -156,9 +159,15 @@ class RegistrarController {
 
         // Calculate metrics
         $metrics = [
-            'total_students' => $this->db->query("SELECT COUNT(id) FROM users WHERE role='student'")->fetchColumn(),
-            'total_advisors' => $this->db->query("SELECT COUNT(id) FROM users WHERE role='advisor'")->fetchColumn(),
+            'total_students' => $this->db->query("SELECT COUNT(id) FROM students")->fetchColumn(),
+            'total_advisors' => $this->db->query("SELECT COUNT(id) FROM advisors")->fetchColumn(),
+            'total_questions' => $this->db->query("SELECT COUNT(id) FROM questions")->fetchColumn(),
+            'total_notifications' => $this->db->query("SELECT COUNT(id) FROM notifications")->fetchColumn(),
         ];
+
+        $assignments = $this->assignment->getAllAssignments();
+        $advisors = $this->db->query("SELECT * FROM advisors")->fetchAll();
+        $students = $this->db->query("SELECT * FROM students")->fetchAll();
 
         return [
             'students' => $studentsQuery->fetchAll(PDO::FETCH_ASSOC),
@@ -167,8 +176,17 @@ class RegistrarController {
             'assignments' => $assignmentsQuery->fetchAll(PDO::FETCH_ASSOC),
             'users' => $allUsersQuery->fetchAll(PDO::FETCH_ASSOC),
             'metrics' => $metrics,
-            'search' => $search,
-            'role_filter' => $role_filter
+            'assignments' => $assignments,
+            'advisors' => $advisors,
+            'students' => $students
         ];
     }
+
+    private function makeUrl($path) {
+        $proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+        return "{$proto}://{$host}{$base}/{$path}";
+    }
 }
+

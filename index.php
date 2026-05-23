@@ -23,6 +23,22 @@ if (in_array($action, ['login', 'register', 'logout'])) {
     require_once __DIR__ . '/controllers/RegistrarController.php';
     $registrarController = new RegistrarController();
     $registrarController->deleteUser();
+} elseif ($action === 'approve_student' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/controllers/RegistrarController.php';
+    $registrarController = new RegistrarController();
+    $registrarController->approveStudent();
+} elseif ($action === 'reject_student' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/controllers/RegistrarController.php';
+    $registrarController = new RegistrarController();
+    $registrarController->rejectStudent();
+} elseif ($action === 'create_advisor' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/controllers/RegistrarController.php';
+    $registrarController = new RegistrarController();
+    $registrarController->createAdvisor();
+} elseif ($action === 'send_message' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_once __DIR__ . '/controllers/RegistrarController.php';
+    $registrarController = new RegistrarController();
+    $registrarController->sendMessage();
 }
 
 // Simple Router
@@ -80,11 +96,14 @@ switch ($action) {
         break;
         
     case 'home':
-    default:
         if (isset($_SESSION['user_id'])) {
             header('Location: index.php?action=dashboard');
             exit;
         }
-        header('Location: index.php?action=login');
+        include __DIR__ . '/views/landing.php';
+        break;
+
+    default:
+        header('Location: index.php?action=home');
         break;
 }

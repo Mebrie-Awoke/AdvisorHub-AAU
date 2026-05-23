@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('student', 'advisor', 'registrar') NOT NULL DEFAULT 'student',
+    status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+    student_number VARCHAR(50) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -43,7 +45,10 @@ CREATE TABLE IF NOT EXISTS advisor_assignments (
 CREATE TABLE IF NOT EXISTS messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     sender_id INT NOT NULL,
-    receiver_id INT NOT NULL,
+    receiver_id INT NULL,
+    audience_type ENUM('advisor') NULL,
+    message_type ENUM('broadcast', 'individual') DEFAULT 'individual',
+    title VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_read BOOLEAN DEFAULT FALSE,

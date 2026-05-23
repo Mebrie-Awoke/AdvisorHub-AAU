@@ -9,6 +9,8 @@ class User {
     public $email;
     public $password;
     public $role;
+    public $status;
+    public $student_number;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -18,18 +20,22 @@ class User {
         try {
             $this->conn->beginTransaction();
 
-            $query = 'INSERT INTO ' . $this->table . ' SET name = :name, email = :email, password = :password, role = :role';
+            $query = 'INSERT INTO ' . $this->table . ' SET name = :name, email = :email, password = :password, role = :role, status = :status, student_number = :student_number';
             $stmt = $this->conn->prepare($query);
 
             $this->name = htmlspecialchars(strip_tags($this->name));
             $this->email = htmlspecialchars(strip_tags($this->email));
             $this->password = password_hash($this->password, PASSWORD_BCRYPT);
             $this->role = htmlspecialchars(strip_tags($this->role));
+            $this->status = htmlspecialchars(strip_tags($this->status));
+            $this->student_number = htmlspecialchars(strip_tags($this->student_number));
 
             $stmt->bindParam(':name', $this->name);
             $stmt->bindParam(':email', $this->email);
             $stmt->bindParam(':password', $this->password);
             $stmt->bindParam(':role', $this->role);
+            $stmt->bindParam(':status', $this->status);
+            $stmt->bindParam(':student_number', $this->student_number);
 
             $stmt->execute();
             $newUserId = $this->conn->lastInsertId();
@@ -57,7 +63,7 @@ class User {
     }
 
     public function login() {
-        $query = 'SELECT id, name, email, password, role FROM ' . $this->table . ' WHERE email = :email LIMIT 0,1';
+        $query = 'SELECT id, name, email, password, role, status FROM ' . $this->table . ' WHERE email = :email LIMIT 0,1';
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $this->email);
@@ -70,6 +76,7 @@ class User {
                 $this->id = $row['id'];
                 $this->name = $row['name'];
                 $this->role = $row['role'];
+                $this->status = $row['status'];
                 return true;
             }
         }
@@ -93,8 +100,54 @@ class User {
 
     // --- CRUD Methods for Registrar ---
 
+    public function approveStudent($id) {
+        $query = 'UPDATE ' . $this->table . ' SET status = "approved" WHERE id = :id AND role = "student"';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+    public function rejectStudent($id) {
+        $query = 'UPDATE ' . $this->table . ' SET status = "rejected" WHERE id = :id AND role = "student"';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
+    public function createAdvisor() {
+        try {
+            $this->conn->beginTransaction();
+
+            $query = 'INSERT INTO ' . $this->table . ' SET name = :name, email = :email, password = :password, role = "advisor", status = "approved"';
+            $stmt = $this->conn->prepare($query);
+
+            $this->name = htmlspecialchars(strip_tags($this->name));
+            $this->email = htmlspecialchars(strip_tags($this->email));
+            $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+
+            $stmt->bindParam(':name', $this->name);
+            $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':password', $this->password);
+
+            $stmt->execute();
+            $newUserId = $this->conn->lastInsertId();
+
+            $roleQuery = 'INSERT INTO advisors SET id = :id, user_id = :user_id';
+            $roleStmt = $this->conn->prepare($roleQuery);
+            $roleStmt->bindParam(':id', $newUserId);
+            $roleStmt->bindParam(':user_id', $newUserId);
+            $roleStmt->execute();
+
+            $this->conn->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            return false;
+        }
+    }
+
     public function getAllUsers($search = '', $role_filter = '') {
-        $query = 'SELECT id, name, email, role, created_at FROM ' . $this->table . ' WHERE 1=1';
+        $query = 'SELECT id, name, email, role, status, student_number, created_at FROM ' . $this->table . ' WHERE 1=1';
 
         if (!empty($search)) {
             $query .= ' AND (name LIKE :search OR email LIKE :search)';
@@ -133,7 +186,7 @@ class User {
     }
 
     public function getUserById($id) {
-        $query = 'SELECT id, name, email, role FROM ' . $this->table . ' WHERE id = :id LIMIT 0,1';
+        $query = 'SELECT id, name, email, role, status, student_number FROM ' . $this->table . ' WHERE id = :id LIMIT 0,1';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

@@ -17,7 +17,15 @@ class AuthController {
             $this->user->name = $_POST['name'];
             $this->user->email = $_POST['email'];
             $this->user->password = $_POST['password'];
-            $this->user->role = $_POST['role'];
+            $this->user->student_number = $_POST['student_number'];
+            $this->user->role = 'student'; // Only students can self-register
+            $this->user->status = 'pending';
+
+            if (!str_ends_with(strtolower($this->user->email), '@aau.edu.et')) {
+                $_SESSION['error'] = 'Only official university email addresses (@aau.edu.et) are allowed.';
+                header('Location: index.php?action=register');
+                exit;
+            }
 
             if ($this->user->emailExists()) {
                 $_SESSION['error'] = 'Email already exists.';
@@ -43,6 +51,18 @@ class AuthController {
             $this->user->password = $_POST['password'];
 
             if ($this->user->login()) {
+                if ($this->user->role === 'student') {
+                    if ($this->user->status === 'pending') {
+                        $_SESSION['error'] = 'Your account is pending approval by the registrar.';
+                        header('Location: index.php?action=login');
+                        exit;
+                    } elseif ($this->user->status === 'rejected') {
+                        $_SESSION['error'] = 'Your registration was rejected. Please contact the registrar.';
+                        header('Location: index.php?action=login');
+                        exit;
+                    }
+                }
+
                 $_SESSION['user_id'] = $this->user->id;
                 $_SESSION['user_name'] = $this->user->name;
                 $_SESSION['user_role'] = $this->user->role;

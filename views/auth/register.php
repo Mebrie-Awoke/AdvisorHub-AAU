@@ -26,12 +26,8 @@
         </div>
 
         <div class="form-group">
-            <label for="role">Select Role</label>
-            <select name="role" id="role" required>
-                <option value="student">🎓 Student</option>
-                <option value="advisor">📋 Advisor</option>
-                <option value="registrar">🏛️ Registrar</option>
-            </select>
+            <label for="student_number">Student ID</label>
+            <input type="text" name="student_number" id="student_number" placeholder="Your Student ID" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Create Account →</button>

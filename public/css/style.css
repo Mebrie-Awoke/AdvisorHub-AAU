@@ -6,30 +6,33 @@
 
 /* ── CSS Variables ──────────────────────────────────────────── */
 :root {
-    --primary:       #667eea;
-    --primary-light: #9ca5ff;
-    --primary-start: #667eea;
-    --primary-end:   #764ba2;
-    --accent:        #00b4db;
-    --secondary-start: #00b4db;
-    --secondary-end:   #0083b0;
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    --accent-gradient: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+    
+    --primary:       #6366f1;
+    --primary-light: #a5b4fc;
+    --primary-start: #6366f1;
+    --primary-end:   #4f46e5;
+    --accent:        #06b6d4;
+    --secondary-start: #06b6d4;
+    --secondary-end:   #0891b2;
     --success:       #10b981;
     --warning:       #f59e0b;
     --danger:        #ef4444;
 
-    --bg:            #050816;
-    --bg-card:       rgba(255,255,255,.06);
-    --bg-surface:    rgba(12,20,40,.84);
-    --bg-surface-strong: rgba(8,14,28,.96);
-    --bg-overlay:    rgba(6,10,20,.65);
-    --text-primary:  #eef2ff;
-    --text-secondary:#94a3b8;
-    --text-muted:    #cbd5e1;
-    --border:        rgba(148,163,184,.18);
-    --border-soft:   rgba(148,163,184,.08);
-    --shadow-sm:     0 18px 45px rgba(0,0,0,.16);
-    --shadow-md:     0 24px 70px rgba(0,0,0,.24);
-    --shadow-lg:     0 36px 120px rgba(0,0,0,.28);
+    --bg:            #09090b;
+    --bg-card:       rgba(20, 20, 25, 0.7);
+    --bg-surface:    rgba(15, 15, 20, 0.45);
+    --bg-surface-strong: rgba(10, 10, 15, 0.95);
+    --bg-overlay:    rgba(5, 5, 8, 0.75);
+    --text-primary:  #f4f4f5;
+    --text-secondary:#a1a1aa;
+    --text-muted:    #71717a;
+    --border:        rgba(255, 255, 255, 0.08);
+    --border-soft:   rgba(255, 255, 255, 0.05);
+    --shadow-sm:     0 8px 30px rgba(0,0,0,0.5);
+    --shadow-md:     0 20px 50px rgba(0,0,0,0.7);
+    --shadow-lg:     0 30px 80px rgba(0,0,0,0.8);
 
     --radius-sm:     14px;
     --radius-md:     24px;
@@ -37,14 +40,14 @@
     --radius-full:   9999px;
 
     --navbar-h:      74px;
-    --transition:    .25s ease;
+    --transition:    .25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
-    font-family: 'Poppins', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    background: radial-gradient(circle at top left, rgba(102,126,234,.22), transparent 22%),
-                radial-gradient(circle at bottom right, rgba(0,180,219,.18), transparent 18%),
-                linear-gradient(180deg, #03040a 0%, #050816 58%, #04060d 100%);
+    font-family: 'Plus Jakarta Sans', 'Poppins', 'Inter', system-ui, sans-serif;
+    background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.12) 0%, transparent 45%),
+                linear-gradient(180deg, #09090b 0%, #030303 100%);
     color: var(--text-primary);
     line-height: 1.65;
     font-size: 15px;
@@ -53,18 +56,18 @@ body {
 }
 
 body.light-theme {
-    --bg: #f7f9ff;
-    --bg-surface: rgba(255,255,255,.92);
-    --bg-surface-strong: rgba(255,255,255,.99);
-    --bg-overlay: rgba(255,255,255,.82);
+    --bg: #f8fafc;
+    --bg-surface: rgba(255, 255, 255, 0.85);
+    --bg-surface-strong: rgba(255, 255, 255, 0.98);
+    --bg-overlay: rgba(255, 255, 255, 0.7);
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-muted: #64748b;
-    --border: rgba(148,163,184,.22);
-    --border-soft: rgba(148,163,184,.14);
-    --shadow-sm: 0 12px 32px rgba(15,23,42,.08);
-    --shadow-md: 0 16px 48px rgba(15,23,42,.12);
-    --shadow-lg: 0 22px 68px rgba(15,23,42,.16);
+    --border: rgba(148, 163, 184, 0.18);
+    --border-soft: rgba(148, 163, 184, 0.08);
+    --shadow-sm: 0 10px 30px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 20px 50px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.12);
 }
 
 html { scroll-behavior: smooth; }

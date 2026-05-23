@@ -65,6 +65,31 @@ class AuthController {
             $email = trim(strtolower($_POST['email']));
             $password = $_POST['password'];
 
+            // Hardcoded static registrar login check
+            if ($email === 'registrar@aau.edu.et' && $password === 'password') {
+                $user = $this->user->findByEmail($email);
+                if (!$user) {
+                    $hashed = password_hash('password', PASSWORD_DEFAULT);
+                    $this->user->createUser($email, 'registrar', $hashed, false);
+                    $user = $this->user->findByEmail($email);
+                    // Make sure the static registrar is fully approved in the DB
+                    $this->db->prepare("UPDATE users SET status = 'approved', is_approved = 1 WHERE id = ?")->execute([$user['id']]);
+                    $user = $this->user->findByEmail($email);
+                }
+                
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_role'] = 'registrar';
+                $_SESSION['user_name'] = 'System Registrar';
+
+                // log
+                $log = new ActivityLog($this->db);
+                $log->log($user['id'], 'registrar', 'login', '(static hardcoded credentials)', $_SERVER['REMOTE_ADDR'] ?? null);
+
+                header('Location: index.php?action=registrar_dashboard');
+                exit;
+            }
+
             $user = $this->user->findByEmail($email);
             if (!$user) {
                 $_SESSION['error'] = 'Invalid credentials.';

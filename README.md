@@ -5,7 +5,7 @@ Quick setup
  
 1. Create a MySQL database and import schema:
 
-```bash
+```bash 
 mysql -u root -p < config/setup.sql
 ```
 

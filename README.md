@@ -2,7 +2,7 @@
 AdvisorHub is a lightweight university advisor management system for Addis Ababa University (AAU). This repository contains a minimal but production-minded PHP implementation.
  
 Quick setup      
- 
+  
 1. Create a MySQL database and import schema:
 
 ```bash 

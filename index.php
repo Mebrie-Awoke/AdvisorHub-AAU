@@ -1,7 +1,7 @@
 <?php 
 session_start(); 
 
-$action = isset($_GET['action']) ? $_GET['action'] : 'home';  
+$action = isset($_GET['action']) ? $_GET['action'] : 'home';    
 
 // Auth actions
 if (in_array($action, ['login', 'register', 'logout', 'force_change_password', 'setup_password'])) {

@@ -42,7 +42,7 @@ if (in_array($action, ['login', 'register', 'logout', 'force_change_password', '
 if ($action === 'approve_student' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once __DIR__ . '/controllers/RegistrarController.php';
     $registrarController = new RegistrarController();
-    $registrarController->approveStudent();
+    $registrarController->approveStudent(); 
 }
 
 if ($action === 'reject_student' && $_SERVER['REQUEST_METHOD'] === 'POST') {

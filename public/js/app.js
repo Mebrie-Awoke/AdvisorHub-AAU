@@ -1,4 +1,4 @@
-const root = document.documentElement;
+const root = document.documentElement;  
 const body = document.body; 
 const themeToggle = document.getElementById('themeToggle');
 const mobileToggle = document.getElementById('mobileMenuToggle');

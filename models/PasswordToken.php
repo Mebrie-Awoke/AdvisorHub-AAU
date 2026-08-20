@@ -16,7 +16,7 @@ class PasswordToken {
         $stmt->bindParam(':expires_at', $expires_at);
         return $stmt->execute();
     }
-
+   
     public function findByToken($token) {
         $stmt = $this->conn->prepare("SELECT * FROM {$this->table} WHERE token = :token LIMIT 1");
         $stmt->bindParam(':token', $token);

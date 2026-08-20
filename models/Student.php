@@ -7,7 +7,7 @@ class Student extends User {
     public function __construct($db) {
         parent::__construct($db);
     }
-
+  
     public function findByUserId($user_id) {
         $query = "SELECT * FROM {$this->studentTable} WHERE user_id = :user_id LIMIT 1";
         $stmt = $this->conn->prepare($query);

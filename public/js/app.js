@@ -1,5 +1,5 @@
 const root = document.documentElement;
-const body = document.body;
+const body = document.body; 
 const themeToggle = document.getElementById('themeToggle');
 const mobileToggle = document.getElementById('mobileMenuToggle');
 const navbarMenu = document.getElementById('navbarMenu');

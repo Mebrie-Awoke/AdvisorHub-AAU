@@ -13,7 +13,7 @@ if (in_array($action, ['login', 'register', 'logout', 'force_change_password', '
     } elseif ($action === 'register' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $authController->register();
     } elseif ($action === 'logout') {
-        $authController->logout();
+        $authController->logout(); 
     } elseif ($action === 'force_change_password' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         // process forced password change
         require_once __DIR__ . '/models/User.php';

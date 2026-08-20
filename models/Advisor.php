@@ -2,7 +2,7 @@
 require_once __DIR__ . '/User.php';
 
 class Advisor extends User {    
-    private $advisorTable = 'advisors';
+    private $advisorTable = 'advisors'; 
 
     public function __construct($db) {
         parent::__construct($db);

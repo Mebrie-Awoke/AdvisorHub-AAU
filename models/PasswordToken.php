@@ -2,7 +2,7 @@
 
 class PasswordToken {
     private $conn;
-    private $table = 'password_tokens';
+    private $table = 'password_tokens'; 
 
     public function __construct($db) {
         $this->conn = $db;

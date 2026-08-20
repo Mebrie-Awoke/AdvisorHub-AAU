@@ -2,7 +2,7 @@
 require_once __DIR__ . '/User.php';
 
 class Student extends User {
-    private $studentTable = 'students';
+    private $studentTable = 'students'; 
 
     public function __construct($db) {
         parent::__construct($db);

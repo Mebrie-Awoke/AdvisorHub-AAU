@@ -7,7 +7,7 @@ class Notification {
     public function __construct($db) {
         $this->conn = $db;
     }
-
+ 
     public function create($advisor_id, $subject, $message, $is_urgent = false, $sent_to_all = false, $recipient_ids = null) {
         $query = "INSERT INTO {$this->table} (advisor_id, subject, message, is_urgent, sent_to_all, recipient_ids) VALUES (:advisor_id, :subject, :message, :is_urgent, :sent_to_all, :recipient_ids)";
         $stmt = $this->conn->prepare($query);

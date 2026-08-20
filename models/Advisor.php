@@ -8,7 +8,7 @@ class Advisor extends User {
         parent::__construct($db);
     }
 
-    public function findByUserId($user_id) {
+    public function findByUserId($user_id) { 
         $query = "SELECT * FROM {$this->advisorTable} WHERE user_id = :user_id LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);

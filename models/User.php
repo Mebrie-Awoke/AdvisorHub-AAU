@@ -11,7 +11,7 @@ class User {
     public $role;
     public $status;
     public $student_number;
-
+  
     public function __construct($db) {
         $this->conn = $db;
     }

@@ -7,7 +7,7 @@ class PasswordToken {
     public function __construct($db) {
         $this->conn = $db;
     }
-
+  
     public function create($user_id, $token, $type, $expires_at) {
         $stmt = $this->conn->prepare("INSERT INTO {$this->table} (user_id, token, type, expires_at) VALUES (:user_id, :token, :type, :expires_at)");
         $stmt->bindParam(':user_id', $user_id);

@@ -45,7 +45,7 @@ class Message {
         }
         return false;
     }
-
+ 
     public function getMessagesForUser($user_id, $role) {
         // Individual messages for this user
         $query = "SELECT m.*, u.name as sender_name 

@@ -4,7 +4,7 @@ class User {
     private $conn;
     private $table = 'users';
 
-    public $id;
+    public $id; 
     public $email;
     public $password; // plaintext for input purposes only
     public $password_hash;

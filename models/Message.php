@@ -57,7 +57,7 @@ class Message {
         if ($role === 'advisor') {
             $query .= " OR (m.message_type = 'broadcast' AND m.audience_type = 'advisor') ";
         }
-        else
+        
         $query .= " ORDER BY m.sent_at DESC";
 
         $stmt = $this->conn->prepare($query);

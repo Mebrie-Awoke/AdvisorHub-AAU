@@ -23,7 +23,7 @@ class Question {
         $stmt->execute();
         return $stmt->fetchAll();
     }
-
+  
     public function answer($question_id, $answer_text) {
         $stmt = $this->conn->prepare("UPDATE {$this->table} SET answer_text = :answer_text, status = 'answered', answered_at = NOW() WHERE id = :id");
         $stmt->bindParam(':answer_text', $answer_text);

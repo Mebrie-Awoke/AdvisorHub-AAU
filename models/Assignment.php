@@ -1,6 +1,6 @@
 <?php
 
-class Assignment {
+class Assignment { 
     private $conn;
     private $table = 'assignments';
 
